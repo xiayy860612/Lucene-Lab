@@ -1,0 +1,7 @@
+While suitable for any application that requires full text indexing and searching capability, Lucene has been widely recognized[6][7] for its utility in the implementation of Internet search engines and local, single-site searching.
+
+Lucene includes a feature to perform a fuzzy search based on edit distance.[8]
+
+Lucene has also been used to implement recommendation systems.[9] For example, Lucene's 'MoreLikeThis' Class can generate recommendations for similar documents. In a comparison of the term vector-based similarity approach of 'MoreLikeThis' with citation-based document similarity measures, such as Co-citation and Co-citation Proximity Analysis Lucene's approach excelled at recommending documents with very similar structural characteristics and more narrow relatedness.[10] In contrast, citation-based document similarity measures, tended to be more suitable for recommending more broadly related documents,[10] meaning citation-based approaches may be more suitable for generating serendipitous recommendations, as long as documents to be recommended contain in-text citations.
+
+At the core of Lucene's logical architecture is the idea of a document containing fields of text. This flexibility allows Lucene's API[clarification needed] to be independent of the file format. Text from PDFs, HTML, Microsoft Word, Mind Maps, and OpenDocument documents, as well as many others (except images), can all be indexed as long as their textual information can be extracted.[11]
