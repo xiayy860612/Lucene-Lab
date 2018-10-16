@@ -43,6 +43,10 @@ public class LucenceBasicOpsTest {
     private static final String idField = "id";
     private static final String idValue = "1";
 
+    private static final String contentField = "content";
+    private static final String contentValue = "123456";
+    private static final String updateContentValue = "test123";
+
     @Before
     public void addDocument() throws IOException {
         INDEX_DIR = String.join(File.separator, indexDirUrl.getPath(), UUID.randomUUID().toString());
@@ -55,6 +59,9 @@ public class LucenceBasicOpsTest {
         // add field to document
         Field field = new StringField(idField, idValue, Field.Store.YES);
         document.add(field);
+
+        Field cf = new StringField(contentField, contentValue, Field.Store.YES);
+        document.add(cf);
 
         // add document to index
         writer.addDocument(document);
@@ -86,10 +93,38 @@ public class LucenceBasicOpsTest {
         assertEquals(1, topDocs.totalHits);
 
         Document doc = searcher.doc(topDocs.scoreDocs[0].doc);
-        String exactIdValue = doc.get(idField);
-        assertEquals(idValue, exactIdValue);
+        String exactIdValue = doc.get(contentField);
+        assertEquals(contentValue, exactIdValue);
     }
 
+    @Test
+    public void update() throws IOException {
+        FSDirectory directory = FSDirectory.open(Paths.get(INDEX_DIR));
+        IndexWriterConfig config = new IndexWriterConfig();
+        IndexWriter writer = new IndexWriter(directory, config);
 
+        Term term = new Term(idField, idValue);
+
+        Document document = new Document();
+        // add field to document
+        Field field = new StringField(idField, idValue, Field.Store.YES);
+        document.add(field);
+
+        Field cf = new StringField(contentField, updateContentValue, Field.Store.YES);
+        document.add(cf);
+
+        writer.updateDocument(term, document);
+        writer.close();
+
+        IndexReader reader = DirectoryReader.open(directory);
+        IndexSearcher searcher = new IndexSearcher(reader);
+        Query query = new TermQuery(term);
+        TopDocs topDocs = searcher.search(query, 1);
+
+        Document doc = searcher.doc(topDocs.scoreDocs[0].doc);
+        String exactIdValue = doc.get(contentField);
+        assertEquals(updateContentValue, exactIdValue);
+
+    }
 
 }
